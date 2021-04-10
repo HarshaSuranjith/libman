@@ -3,6 +3,8 @@ package lk.nsbm.dea2.libman.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -31,7 +33,10 @@ public class Book {
     @Column(name = "section")
     private Section section;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "book_authors",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authors_id", referencedColumnName = "id"))
     private Set<Author> authors;
 
     @OneToOne
