@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode
 @Entity
-@DiscriminatorValue(value = "2")
 public class Student extends User {
 
     private String studentId;
