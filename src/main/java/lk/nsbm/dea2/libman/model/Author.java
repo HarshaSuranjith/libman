@@ -1,5 +1,6 @@
 package lk.nsbm.dea2.libman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity
 @Table(name = "author")
 public class Author {
@@ -19,6 +19,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_seq_gen")
     @SequenceGenerator(name = "author_seq_gen")
+    @Column(name = "id", unique = true, nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "first_name", nullable = false)
@@ -30,6 +31,7 @@ public class Author {
     @Column(name = "bio", length = 1024)
     private String biography;
 
+    @JsonIgnore
     @Cascade({CascadeType.ALL})
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_authors",

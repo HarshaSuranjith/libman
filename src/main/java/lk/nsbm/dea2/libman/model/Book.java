@@ -1,10 +1,10 @@
 package lk.nsbm.dea2.libman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,6 +19,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq_gen")
     @SequenceGenerator(name = "book_seq_gen")
+    @Column(name = "id", unique = true, nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "title")
@@ -33,7 +34,7 @@ public class Book {
     @Column(name = "section")
     private Section section;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.DETACH)
     @JoinTable(name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authors_id", referencedColumnName = "id"))
@@ -44,4 +45,11 @@ public class Book {
             foreignKey = @ForeignKey(name = "fk_book_publisher"))
     private Publisher publisher;
 
+    @JsonIgnore
+    public boolean isValid() {
+        return title != null && !title.isEmpty()
+                && isbn != null && !isbn.isEmpty()
+                && section != null
+                && authors != null && !authors.isEmpty();
+    }
 }

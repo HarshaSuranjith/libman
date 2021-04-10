@@ -8,6 +8,7 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
     @SequenceGenerator(name = "user_seq_gen")
+    @Column(name = "id", unique = true, nullable = false, updatable = false)
     protected Long id;
 
     @Column(name = "first_name", nullable = false)

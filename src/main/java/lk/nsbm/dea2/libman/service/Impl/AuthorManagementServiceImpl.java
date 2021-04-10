@@ -6,6 +6,8 @@ import lk.nsbm.dea2.libman.service.AuthorManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthorManagementServiceImpl implements AuthorManagementService {
 
@@ -18,8 +20,9 @@ public class AuthorManagementServiceImpl implements AuthorManagementService {
     }
 
     @Override
-    public Author update() {
-        return null;
+    public Author update(Author author) {
+        Author updated = this.authorRepository.save(author);
+        return updated;
     }
 
     @Override
@@ -28,8 +31,18 @@ public class AuthorManagementServiceImpl implements AuthorManagementService {
     }
 
     @Override
-    public boolean delete() {
+    public boolean delete(Long id) {
+        Optional<Author> toDelete = this.authorRepository.findById(id);
+        if (toDelete.isPresent()) {
+            this.authorRepository.delete(toDelete.get());
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public Optional<Author> findById(Long id) {
+        return this.authorRepository.findById(id);
     }
 
     @Autowired
